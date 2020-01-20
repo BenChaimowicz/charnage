@@ -8,10 +8,17 @@ import { User } from './users/user.entity';
 import { Character } from './characters/character.entity';
 import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
+import { LocalStrategy } from './auth/local.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: './config' }),
+    ConfigModule.forRoot({ isGlobal: true }),
+    UsersModule,
+    AuthModule,
+    // TypeOrmModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,10 +31,10 @@ import { AuthService } from './auth/auth.service';
         password: configService.get<string>('DB_PASSWORD'),
         entities: [User, Character]
       } as TypeOrmModuleOptions)
-    })
+    }),
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, AuthService],
+  controllers: [UsersController],
+  providers: [UsersService, AuthService],
 })
 export class AppModule {
 

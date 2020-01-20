@@ -21,7 +21,6 @@ export class UsersService {
         try {
             const savedUser: User = await this.userRepo.findOne({ email: user.email });
             if (savedUser && await bcrypt.compare(user.password, savedUser.password)) {
-
             }
         } catch (err) {
             console.error(err);
@@ -31,6 +30,10 @@ export class UsersService {
 
     private async hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
+    }
+
+    async findUserByEmail(email: string) {
+        return this.userRepo.findOne({ email });
     }
 
 }
