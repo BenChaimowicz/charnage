@@ -29,12 +29,13 @@ import { AuthModule } from './auth/auth.module';
         database: configService.get<string>('DB_NAME'),
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASSWORD'),
-        entities: [User, Character]
+        entities: [User, Character],
+        synchronize: true
       } as TypeOrmModuleOptions)
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService, AuthService],
+  providers: [UsersService],
 })
 export class AppModule {
 

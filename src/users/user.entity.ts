@@ -13,7 +13,7 @@ export class User {
     password: string;
 
     @Column('timestamp with time zone')
-    lastLogin: string;
+    lastLogin: Date;
 
     @Column()
     isActive: boolean;
