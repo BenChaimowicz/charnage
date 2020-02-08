@@ -10,15 +10,21 @@ export class UsersService {
     constructor(@InjectRepository(User) private readonly userRepo: Repository<User>) { }
 
     async create(user: CreateUserDto) {
-        const now = new Date();
-        const hashedPassword = await this.hashPassword(user.password);
-        const newUser: User = await this.userRepo.create({
-            email: user.email,
-            isActive: true,
-            password: hashedPassword,
-            lastLogin: now
-        });
-        return await this.userRepo.save(newUser);
+        let u = await this.findUserByEmail(user.email);
+        if (!u) {
+            console.log(u);
+            const now = new Date();
+            const hashedPassword = await this.hashPassword(user.password);
+            const newUser: User = await this.userRepo.create({
+                email: user.email,
+                isActive: true,
+                password: hashedPassword,
+                lastLogin: now
+            });
+            return await this.userRepo.save(newUser);
+        } else {
+            return { error: 'user already exists' };
+        }
     }
 
     async loginUser(user: User) {
